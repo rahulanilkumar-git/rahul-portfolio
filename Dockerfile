@@ -37,3 +37,8 @@ RUN composer install --no-dev --optimize-autoloader
 
 # Expose port and run Laravel using Artisan
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+
+# Create the SQLite file if it doesn't exist (safe redundancy)
+RUN mkdir -p database && \
+    touch database/database.sqlite && \
+    chmod -R 775 database
