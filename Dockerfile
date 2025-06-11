@@ -1,44 +1,50 @@
-# Use the official PHP image with Apache
+# Use official PHP image with Apache
 FROM php:8.2-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    unzip \
     git \
     curl \
-    libzip-dev \
+    unzip \
     zip \
-    libpng-dev \
     libonig-dev \
     libxml2-dev \
-    && docker-php-ext-install pdo pdo_mysql zip
+    libzip-dev \
+    sqlite3 \
+    && docker-php-ext-install pdo pdo_sqlite zip
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy app files
+# Copy project files
 COPY . .
 
-# Set appropriate permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 storage bootstrap/cache
+# Install Composer
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
-# Install dependencies
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Generate APP_KEY (optional if already set in Render environment)
-# RUN php artisan key:generate
-
-# Expose port and run Laravel using Artisan
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
-
-# Create the SQLite file if it doesn't exist (safe redundancy)
+# Create SQLite database file
 RUN mkdir -p database && \
     touch database/database.sqlite && \
     chmod -R 775 database
+
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/html
+
+# Set environment variables (these are overridden by `.env`)
+ENV APP_ENV=production
+ENV APP_DEBUG=false
+ENV APP_KEY=base64:SomeDummyKeyChangeThisLater
+ENV DB_CONNECTION=sqlite
+ENV DB_DATABASE=/var/www/html/database/database.sqlite
+
+# Expose port 80
+EXPOSE 80
+
+# Start Apache
+CMD ["apache2-foreground"]
