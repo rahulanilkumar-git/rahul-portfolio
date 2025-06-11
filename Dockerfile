@@ -1,32 +1,25 @@
-# Use PHP 8.1 with necessary extensions
-FROM php:8.1-fpm
-
-# Set working directory
-WORKDIR /var/www/html
+# Use official PHP image
+FROM php:8.2-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    curl \
-    libzip-dev \
-    zip \
-    && docker-php-ext-install zip pdo pdo_mysql
+    git curl zip unzip libzip-dev libpng-dev libonig-dev libxml2-dev \
+    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath
 
-# Install Composer
+# Install Composer globally
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy project files into container
+# Set working directory
+WORKDIR /var/www
+
+# Copy project files
 COPY . .
 
 # Install Laravel dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Generate app key
-RUN php artisan key:generate
+# Laravel permissions
+RUN chown -R www-data:www-data storage bootstrap/cache
 
-# Expose port (required by Render)
-EXPOSE 8000
-
-# Start Laravel's PHP development server
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Run Laravel server on port 8080
+CMD php artisan serve --host=0.0.0.0 --port=8080
