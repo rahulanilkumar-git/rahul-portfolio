@@ -1,7 +1,10 @@
-# Use the official PHP image with Apache
+# Use PHP with Apache
 FROM php:8.2-apache
 
-# Install system packages and PHP extensions
+# Set working directory
+WORKDIR /var/www
+
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -11,40 +14,35 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libzip-dev \
     libsqlite3-dev \
-    pkg-config \
     sqlite3 \
     && docker-php-ext-install pdo pdo_sqlite zip
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Set working directory
-WORKDIR /var/www/html
-
-# Copy project files
-COPY . .
+# Set DocumentRoot to Laravel's public folder
+RUN sed -i 's|/var/www/html|/var/www/public|g' /etc/apache2/sites-available/000-default.conf
 
 # Install Composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Copy all files to container
+COPY . .
 
-# Create SQLite database
-RUN mkdir -p database && \
-    touch database/database.sqlite && \
-    chmod -R 775 database
+# Create SQLite DB file so Laravel doesn't crash
+RUN mkdir -p database && touch database/database.sqlite
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www
 
-# Environment variables (for safety; override with .env in production)
-ENV DB_CONNECTION=sqlite
-ENV DB_DATABASE=/var/www/html/database/database.sqlite
-ENV APP_ENV=production
-ENV APP_DEBUG=false
+# Install Laravel dependencies
+RUN composer install --no-dev --optimize-autoloader
 
-# Expose Apache port
+# Generate Laravel app key
+RUN php artisan key:generate
+
+# Expose port 80
 EXPOSE 80
 
 # Start Apache
