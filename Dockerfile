@@ -1,46 +1,44 @@
-# Use PHP with Apache
+# Set base image
 FROM php:8.2-apache
 
 # Set working directory
-WORKDIR /var/www
+WORKDIR /var/www/html
 
-# Install system dependencies and PHP extensions
+# Install dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    unzip \
-    zip \
+    build-essential \
+    libpng-dev \
+    libjpeg-dev \
     libonig-dev \
     libxml2-dev \
-    libzip-dev \
-    libsqlite3-dev \
+    zip \
+    unzip \
+    curl \
     sqlite3 \
-    && docker-php-ext-install pdo pdo_sqlite zip
+    libsqlite3-dev \
+    libzip-dev \
+    git \
+    && docker-php-ext-install pdo pdo_sqlite zip gd
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Set DocumentRoot to Laravel's public folder
-RUN sed -i 's|/var/www/html|/var/www/public|g' /etc/apache2/sites-available/000-default.conf
-
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy all files to container
+# Copy project files
 COPY . .
 
-# Create SQLite DB file so Laravel doesn't crash
-RUN mkdir -p database && touch database/database.sqlite
-
 # Set permissions
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
 # Install Laravel dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Generate Laravel app key
-RUN php artisan key:generate
+# Set Apache DocumentRoot to Laravel public folder
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 
 # Expose port 80
 EXPOSE 80
