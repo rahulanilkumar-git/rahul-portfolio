@@ -1,0 +1,161 @@
+/* Base Styles */
+body {
+  background-color: #fff;
+  color: #212529;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  height: 100vh;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/welcome.avif') center/cover no-repeat;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  flex-direction: column;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.hero-buttons {
+  margin-top: 1.5rem;
+}
+
+.hero-buttons .btn {
+  margin: 0 10px;
+  padding: 12px 28px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.hero-buttons .btn-primary {
+  background-color: #007bff;
+  border: none;
+}
+
+.hero-buttons .btn-primary:hover {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+.hero-buttons .btn-outline-light {
+  border: 2px solid #fff;
+  color: #fff;
+  background-color: transparent;
+}
+
+.hero-buttons .btn-outline-light:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+/* Typewriter */
+.typewriter-text {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #e0e0e0;
+  font-family: 'Courier New', Courier, monospace;
+  min-height: 30px;
+}
+
+.cursor {
+  display: inline-block;
+  width: 1px;
+  background: #fff;
+  animation: blink 1s infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* About Section */
+.about p {
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: auto;
+}
+
+/* Projects Section */
+.projects .card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.projects .card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Contact CTA */
+.cta {
+  cursor: default;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.2rem;
+  }
+  .hero-buttons .btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    margin: 5px 5px;
+  }
+}
+
+/* Dark Mode */
+.dark-mode {
+  background-color: #121212 !important;
+  color: #eee !important;
+}
+
+.dark-mode nav.navbar {
+  background-color: #222 !important;
+}
+
+.dark-mode .navbar .nav-link {
+  color: #eee !important;
+}
+
+.dark-mode footer {
+  background-color: #222 !important;
+  color: #eee !important;
+}
+
+.dark-mode h1, .dark-mode h2, .dark-mode h3, .dark-mode h4, .dark-mode h5, .dark-mode h6 {
+  color: #fff !important;
+}
+
+.dark-mode a {
+  color: #66ccff !important;
+}
+
+.dark-mode .btn-secondary {
+  background-color: #555;
+  border-color: #555;
+  color: #eee;
+}
+.reveal {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.6s ease-in-out;
+}
+
+section {
+  opacity: 0;
+  transform: translateY(40px);
+}
