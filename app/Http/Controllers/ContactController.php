@@ -23,7 +23,7 @@ class ContactController extends Controller
             'message' => 'required|string',
         ]);
 
-        Contact::create($validated);
+        //Contact::create($validated);
 
         Mail::to('rahulanilpunalur@gmail.com')->send(new ContactFormMail($validated));
 
