@@ -7,8 +7,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::view('/about', 'about');
-Route::view('/projects', 'projects');
+Route::view('/about', 'about')->name('about');
+//Route::view('/about', 'about');
+Route::view('/projects', 'projects')->name('projects');
 //Route::view('/contact', 'contact');
 Route::get('/contact', [ContactController::class, 'showForm']);
 Route::post('/contact', [ContactController::class, 'sendForm']);
