@@ -37,28 +37,32 @@ document.addEventListener("DOMContentLoaded", function () {
   sections.forEach(section => observer.observe(section));
 
   // Skills Radar Chart
-  if (document.getElementById("skillsChart")) {
+  // Inside custom.js
     const ctx = document.getElementById("skillsChart").getContext("2d");
     new Chart(ctx, {
-      type: 'radar',
-      data: {
-        labels: ["Laravel", "JavaScript", "PHP", "Python", "SQL", "Git"],
+    type: 'radar',
+    data: {
+        labels: ["Laravel", "JS", "PHP", "Python", "SQL", "Git"],
         datasets: [{
-          label: "Skill Level",
-          data: [95, 90, 95, 80, 85, 90],
-          backgroundColor: "rgba(0, 123, 255, 0.2)",
-          borderColor: "blue",
-          borderWidth: 2
+        label: "Skill Level",
+        data: [95, 90, 95, 85, 85, 90],
+        backgroundColor: "rgba(0, 123, 255, 0.15)",
+        borderColor: "#007bff",
+        borderWidth: 2
         }]
-      },
-      options: {
+    },
+    options: {
+        responsive: false,
         scales: {
-          r: {
+        r: {
             suggestedMin: 50,
-            suggestedMax: 100
-          }
+            suggestedMax: 100,
+            pointLabels: {
+            font: { size: 12 }
+            }
         }
-      }
+        }
+    }
     });
-  }
+
 });

@@ -257,3 +257,18 @@ section {
   color: #66b2ff;
   border-color: #66b2ff;
 }
+.hero-buttons .btn {
+  margin: 6px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 500;
+}
+
+.about h5 {
+  font-weight: 600;
+  margin-top: 15px;
+}
+
+.tools .badge {
+  font-size: 0.95rem;
+}

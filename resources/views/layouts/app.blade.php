@@ -3,6 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
+  <meta name="description" content="Rahul Anilkumar – Full Stack Developer | Laravel | PHP | JavaScript">
+  <meta property="og:title" content="Rahul Anilkumar Portfolio" />
+  <meta property="og:url" content="https://rahul-portfolio-ow5p.onrender.com/" />
+  <meta property="og:image" content="{{ asset('images/profile.png') }}">
+
   <title>Rahul Anilkumar - Portfolio</title>
 
   {{-- Bootstrap CSS --}}
